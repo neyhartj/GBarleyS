@@ -110,7 +110,7 @@ inputgroup.add_argument('-i',
 inputgroup.add_argument('-d',
 		'--log_directory',
 		metavar = 'DIR',
-		help = 'Head directory containing the logs from the FastX Toolkit or Cutadapt',
+		help = 'Head directory containing the logs from the FastX Toolkit AND Cutadapt',
 		required = False)
 parser.add_argument('-o',
 		'--output',
@@ -136,6 +136,11 @@ filename = args.output
 
 # Collect the dirname of the directory containing the log files
 dirname = os.path.dirname(args.log_directory) 
+
+# Check to make sure the correct directory is specified
+if dirname.endswith('Cutadapt_Logs') or dirname.endswith('FastX_QT_Logs'):
+	print "The specified directory is too deep. Use the containing directory!"
+	exit(1)
 
 # Dealing with new data from the log files
 toprintcut = [] # List of file data lists
