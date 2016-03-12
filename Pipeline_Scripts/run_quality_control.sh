@@ -38,6 +38,8 @@ RES='PstI'
 # Set the settings for cutadapt
 # The adapter sequence. The listed adapted is the solexa-reverse adapter
 # Be sure to check with your genotyping facility for the correct adapter
+# Multiple adapters may be added by separating them with a comma (',')
+# For example, ADAPTER='TATA','CAAT'
 ADAPTER='AGATCGGAAGAGCGGTTCAGCAGGAATGCCGAG'
 # Other cutadapt settings
 # -f fastq: the file format is fastq
@@ -91,6 +93,9 @@ RESLEN=$(awk -v res=$RES '{ if ($1 == res) print length($2) }' $RESINFO)
 # Calculate the number of additional bases to remove from the beginning of the read
 # The script will use the length of the barcode + the length of the restriction site - 1
 RESLEN=$((${RESLEN} - 1))
+
+# Deal with multiple adapter input
+ADAPTER=$(echo $ADAPTER | sed 's/,/ -a /g')
 
 
 # Create an array of gzipped and compressed samples
