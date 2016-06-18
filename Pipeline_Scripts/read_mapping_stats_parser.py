@@ -160,7 +160,7 @@ for line in toprintmap:
 handle.close()
 
 # Set the GBarleyS directory so the graphing function script can be found
-graph_function = args.gbarleys_directory + '/Pipeline_Scripts/pipeline_graphing_functions.R'
+graph_function = args.gbarleys_directory + '/Pipeline_Scripts/.ancillary/pipeline_graphing_functions.R'
 
 if args.output_PDF:
         # Notify the user

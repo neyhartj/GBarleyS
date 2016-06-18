@@ -91,7 +91,7 @@ parallel "'"fastqc {} -o $(pwd)"'" ::: ${SAMPLES[@]}; \
 wait; \
 find $(pwd) -name "'"*.zip"'" | sort > ${PROJECT}_FastQC_${STAGE}QC_zipfiles.txt; \
 wait; \
-if [[ $STATS ]]; then python $VCPWD/Pipeline_Scripts/fastqc_stats_parser.py -i ${PROJECT}_FastQC_${STAGE}QC_zipfiles.txt -o ${PROJECT}_${STAGE}qc_stats.txt -d $VCPWD -p; \
+if [[ $STATS ]]; then python $VCPWD/Pipeline_Scripts/.ancillary/fastqc_stats_parser.py -i ${PROJECT}_FastQC_${STAGE}QC_zipfiles.txt -o ${PROJECT}_${STAGE}qc_stats.txt -d $VCPWD -p; \
 fi" \
 | qsub ${QUEUE_SETTINGS} -M $EMAIL -m abe -N $INFO -r n -q $NODE && \
 

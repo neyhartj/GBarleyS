@@ -252,7 +252,7 @@ for item in toprint:
 handle.close() # Close the file
 
 # Set the GBarleyS directory so the graphing function script can be found
-graph_function = args.vcpwd_directory + '/Pipeline_Scripts/pipeline_graphing_functions.R'
+graph_function = args.vcpwd_directory + '/Pipeline_Scripts/.ancillary/pipeline_graphing_functions.R'
 
 if args.output_PDF:
 	# Notify the user
