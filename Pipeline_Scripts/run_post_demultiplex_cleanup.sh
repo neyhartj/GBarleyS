@@ -23,7 +23,7 @@ VCPWD=
 QUEUE_SETTINGS='-l walltime=01:00:00,mem=1gb,nodes=1:ppn=8'
 
 # Name of the computing node to use
-NODE=''
+QUEUE=''
 
 
 ########################################

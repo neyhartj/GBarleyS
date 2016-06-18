@@ -99,7 +99,7 @@ VCPWD=
 QUEUE_SETTINGS='-l walltime=03:00:00,mem=22g,nodes=1:ppn=1'
 
 # Computing node
-NODE=''
+QUEUE=''
 
 
 #######################################

@@ -50,7 +50,7 @@ QUEUE_SETTINGS='-l walltime=24:00:00,mem=62gb,nodes=1:ppn=12'
 
 # The computing node to submit the jobs to
 # Note: for this script, using HPC resources is highly recommended
-NODE=''
+QUEUE=''
 
 # Set the settings for GATK HaplotypeCaller
 # --genotyping_mode DISCOVERY: the most likely alternate allele will be chosen

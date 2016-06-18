@@ -41,7 +41,7 @@ REFERENCE=
 QUEUE_SETTINGS='-l walltime=06:00:00,mem=62g,nodes=1:ppn=16'
 
 # Set the node for job submission
-NODE=''
+QUEUE=''
 
 # Email address to receive job notifications
 EMAIL=''

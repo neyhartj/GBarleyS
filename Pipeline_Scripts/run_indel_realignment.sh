@@ -53,7 +53,7 @@ QUEUE_SETTINGS='-l walltime=24:00:00,mem=32gb,nodes=1:ppn=1'
 
 # The computing node to submit the jobs to
 # Note: for this script, using HPC resources is highly recommended
-NODE=''
+QUEUE=''
 
 # Set settings for GATK IndelRealigner
 # -drf DuplicateRead: disable the DuplicateRead filter (important for GBS)

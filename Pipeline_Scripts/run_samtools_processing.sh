@@ -28,7 +28,7 @@ VCPWD=
 QUEUE_SETTINGS='-l walltime=06:00:00,mem=4g,nodes=1:ppn=16'
 
 # Computing node for job submission
-NODE=''
+QUEUE=''
 
 # Email address to receive notifications of job start / completion
 EMAIL=''

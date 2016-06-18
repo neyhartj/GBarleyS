@@ -61,7 +61,7 @@ QUEUE_SETTINGS='-l walltime=12:00:00,mem=62gb,nodes=1:ppn=8'
 
 # The computing node to submit the jobs to
 # Note: for this script, using HPC resources is highly recommended
-NODE=''
+QUEUE=''
 
 # Set the settings for GATK BaseRecalibrator
 # -drf DuplicateRead: disable the DuplicateRead filter (this is very important

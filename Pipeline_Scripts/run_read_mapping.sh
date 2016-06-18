@@ -32,7 +32,7 @@ EMAIL=''
 QUEUE_SETTINGS='-l walltime=08:00:00,mem=22gb,nodes=1:ppn=16'
 
 # Set the computing node to use
-NODE=''
+QUEUE=''
 
 # Choose the software to use for read-mapping
 # Acceptable options are "Bowtie" or "BWA"

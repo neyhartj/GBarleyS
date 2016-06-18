@@ -19,7 +19,7 @@ PROJECT=''
 QUEUE_SETTINGS='-l walltime=03:00:00,mem=4g,nodes=1:ppn=16'
 
 # Set the node for job submission
-NODE=''
+QUEUE=''
 
 # Email address to receive job notifications
 EMAIL=''

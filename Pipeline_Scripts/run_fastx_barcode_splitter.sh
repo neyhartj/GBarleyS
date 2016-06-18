@@ -34,7 +34,7 @@ VCPWD=
 QUEUE_SETTINGS='-l walltime=04:00:00,mem=16gb'
 
 # Specify the computing node
-NODE=''
+QUEUE=''
 
 # FastX_barcode_splitter settings
 # See http://hannonlab.cshl.edu/fastx_toolkit/commandline.html#fastx_barcode_splitter_usage for more information

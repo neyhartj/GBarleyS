@@ -30,7 +30,7 @@ EMAIL=''
 QUEUE_SETTINGS='-l walltime=04:00:00,mem=22gb,nodes=1:ppn=16'
 
 # Set the computing node to use
-NODE=''
+QUEUE=''
 
 # Name of the rare restriction enzyme (e.g. PstI or MspI)
 RES='PstI'
