@@ -72,7 +72,9 @@ set -o pipefail
 
 # Error reporting
 # Check if variables are empty
-if [[ -z $INDIR ]] || [[ -z $OUTDIR ]] || [[ -z $PROJECT ]] || [[ -z $VCPWD ]] || [[ -z $GATK ]] || [[ -z $REFERENCE ]] || [[ -z $EMAIL ]] || [[ -z ${QUEUE_SETTINGS} ]] || [[ -z ${GATK_SETTINGS} ]] || [[ -z $NODE ]] || [[ -z $STAGE ]]; then
+if [[ -z $INDIR ]] || [[ -z $OUTDIR ]] || [[ -z $PROJECT ]] || [[ -z $VCPWD ]] || [[ -z $GATK ]] \
+	|| [[ -z $REFERENCE ]] || [[ -z $EMAIL ]] || [[ -z ${QUEUE_SETTINGS} ]] || [[ -z ${GATK_SETTINGS} ]] \
+	|| [[ -z $QUEUE ]] || [[ -z $STAGE ]]; then
         echo -e "\nERROR: One or more variables was not specified. Please check the script and re-run." && exit 1
 fi
 # Check the STAGE input
@@ -160,7 +162,7 @@ wait; \
 cd $OUTDIRC; \
 GVCFSC="'$(echo $(find '"$OUTDIR -name \"${fl}*g.vcf\""') | sed '"'s/ / --variant /g'"')'"; \
 OUTFILE=${fl}_cohort.g.vcf; \
-java -Xmx60g -jar $GATK -T CombineGVCFs -R $REFERENCE --variant "'$GVCFSC'" ${GATK_SETTINGS} -o "'$OUTFILE'"" | qsub ${QUEUE_SETTINGS} -M $EMAIL -m abe -N $INFO -r n -q $NODE
+java -Xmx60g -jar $GATK -T CombineGVCFs -R $REFERENCE --variant "'$GVCFSC'" ${GATK_SETTINGS} -o "'$OUTFILE'"" | qsub ${QUEUE_SETTINGS} -M $EMAIL -m abe -N $INFO -r n -q $QUEUE
 
 done && echo "Jobs away!"
 

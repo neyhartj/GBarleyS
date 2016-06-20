@@ -83,7 +83,9 @@ set -o pipefail
 
 # Error reporting
 # Check if variables are empty
-if [[ -z $INDIR ]] || [[ -z $OUTDIR ]] || [[ -z $PROJECT ]] || [[ -z $VCPWD ]] || [[ -z $GATK ]] || [[ -z $REFERENCE ]] || [[ -z ${KNOWN_VARIANTS} ]] || [[ -z $EMAIL ]] || [[ -z ${QUEUE_SETTINGS} ]] || [[ -z ${GATK_SETTINGS} ]] || [[ -z $NODE ]]; then
+if [[ -z $INDIR ]] || [[ -z $OUTDIR ]] || [[ -z $PROJECT ]] || [[ -z $VCPWD ]] || [[ -z $GATK ]] \
+        || [[ -z $REFERENCE ]] || [[ -z ${KNOWN_VARIANTS} ]] || [[ -z $EMAIL ]] || \
+        [[ -z ${QUEUE_SETTINGS} ]] || [[ -z ${GATK_SETTINGS} ]] || [[ -z $QUEUE ]]; then
         echo "\nERROR: One or more variables was not specified. Please check the script and re-run." && exit 1
 fi
 
@@ -145,7 +147,7 @@ java -Xmx15g -jar $GATK -T PrintReads -R $REFERENCE -I "'$SAMPLE'" ${GATK_SETTIN
 }; \
 export -f baserecal; \
 parallel -j $NCORES --no-notice "'"baserecal {}"'" ::: ${LANEBAMS[@]}" \
-| qsub ${QUEUE_SETTINGS} -M $EMAIL -m abe -N $INFO -r n -q $NODE
+| qsub ${QUEUE_SETTINGS} -M $EMAIL -m abe -N $INFO -r n -q $QUEUE
 
 done && echo -e "\nJobs away!"
 

@@ -70,7 +70,8 @@ set -o pipefail
 
 # Error reporting
 # Check if variables are empty
-if [[ -z $INDIR ]] || [[ -z $OUTDIR ]] || [[ -z $PROJECT ]] || [[ -z $VCPWD ]] || [[ -z $GATK ]] || [[ -z ${GATK_SETTINGS} ]] || [[ -z $REFERENCE ]]; then
+if [[ -z $INDIR ]] || [[ -z $OUTDIR ]] || [[ -z $PROJECT ]] || [[ -z $VCPWD ]] || \
+	[[ -z $GATK ]] || [[ -z $QUEUE ]] ||[[ -z ${GATK_SETTINGS} ]] || [[ -z $REFERENCE ]]; then
 	echo -e "\nERROR: One or more variables was not specified. Please check the script and re-run." && exit 1
 fi
 # Check the STAGE input
@@ -122,7 +123,7 @@ java -Xmx60g -jar $GATK \
 ${GATK_SETTINGS} \
 -nt $NCORES \
 -o ${PROJECT}_${STAGE}_variants.vcf \
-" | qsub ${QUEUE_SETTINGS} -M $EMAIL -m abe -N $INFO -r n -q $NODE && \
+" | qsub ${QUEUE_SETTINGS} -M $EMAIL -m abe -N $INFO -r n -q $QUEUE && \
 
 echo -e "\nJob away!"
 

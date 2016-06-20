@@ -69,7 +69,9 @@ set -o pipefail
 
 # Error reporting
 # Check if variables are empty
-if [[ -z $INDIR ]] || [[ -z $OUTDIR ]] || [[ -z $PROJECT ]] || [[ -z $RES ]] || [[ -z $VCPWD ]] || [[ -z $EMAIL ]] || [[ -z $ADAPTER ]] || [[ -z ${QUEUE_SETTINGS} ]] || [[ -z ${FASTX_SETTINGS} ]] || [[ -z ${CUTADAPT_SETTINGS} ]]; then
+if [[ -z $INDIR ]] || [[ -z $OUTDIR ]] || [[ -z $PROJECT ]] || [[ -z $RES ]] || \
+	[[ -z $VCPWD ]] || [[ -z $QUEUE ]] || [[ -z $EMAIL ]] || [[ -z $ADAPTER ]] || \
+	[[ -z ${QUEUE_SETTINGS} ]] || [[ -z ${FASTX_SETTINGS} ]] || [[ -z ${CUTADAPT_SETTINGS} ]]; then
 	echo "One or more variables was not specified. Please check the script and re-run." && exit 1
 fi
 
@@ -85,7 +87,8 @@ cd $VCPWD/Pipeline/Quality_Control
 RESINFO=$VCPWD/.resources/.enzyme_site_info
 # Make sure the user-provided restriction site is in the file
 if ! cut -f 1 $RESINFO | grep -q -m 1 $RES; then 
-	echo "The provided RES is not acceptable. Please refer to the GBarleyS documentation for acceptable restriction enzyme names." && exit 1
+	echo "The provided RES is not acceptable. Please refer to the GBarleyS documentation for \
+	acceptable restriction enzyme names." && exit 1
 fi
 
 # Find the length of the restriction site
@@ -156,7 +159,7 @@ cutadapt -a $ADAPTER ${CUTADAPT_SETTINGS} -u ${CUT_LENGTH} "'$SAMPLE'" | fastq_q
 }; \
 export -f qual_control; \
 parallel -j $NCORES \"qual_control {}\" ::: ${fastqs[@]}" \
-| qsub ${QUEUE_SETTINGS} -M $EMAIL -m abe -N QC_barcode_length_${CUT_LENGTH} -e $COUT -o $FOUT -r n -q $NODE
+| qsub ${QUEUE_SETTINGS} -M $EMAIL -m abe -N QC_barcode_length_${CUT_LENGTH} -e $COUT -o $FOUT -r n -q $QUEUE
 
 
 done && echo -e "Jobs away!\n\nThe quality trimmed fastq.gz files can be found here: ${OUTDIR}/Quality_Control_Fastq.\n\nThe logs from Cutadapt can be found here: $VCPWD/Pipeline/Quality_Control/$PROJECT/Cutadapt_Logs.\n\nThe logs from the Fastq_Quality_Trimmer can be found here: $VCPWD/Pipeline/Quality_Control/$PROJECT/FastX_QT_Logs."

@@ -36,7 +36,8 @@ set -o pipefail
 
 # Error reporting
 # Check if variables are empty
-if [[ -z $INDIR ]] || [[ -z $PROJECT ]] || [[ -z $VCPWD ]] || [[ -z $EMAIL ]] || [[ -z ${QUEUE_SETTINGS} ]]; then
+if [[ -z $INDIR ]] || [[ -z $PROJECT ]] || [[ -z $VCPWD ]] || [[ -z $EMAIL ]] || \
+        [[ -z $QUEUE ]] || [[ -z ${QUEUE_SETTINGS} ]]; then
 
 	echo "One or more variables was not specified. Please check the script and re-run." && exit 1
 fi
@@ -86,7 +87,7 @@ do
 
         echo "module load parallel; \
 parallel -j $NCORES \"gzip {}\" ::: ${LANEFQS[@]}" \
-| qsub "${QUEUE_SETTINGS}" -m abe -M $EMAIL -N $INFO -q $NODE
+| qsub "${QUEUE_SETTINGS}" -m abe -M $EMAIL -N $INFO -q $QUEUE
 
 done && echo "Jobs away!"
 

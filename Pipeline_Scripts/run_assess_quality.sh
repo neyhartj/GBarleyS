@@ -47,7 +47,8 @@ set -o pipefail
 
 # Error reporting
 # Check if variables are empty
-if [[ -z $INDIR ]] || [[ -z $PROJECT ]] || [[ -z $VCPWD ]] || [[ -z $STATS ]] || [[ -z ${QUEUE_SETTINGS} ]] || [[ -z $NODE ]] || [[ -z $STAGE ]]; then
+if [[ -z $INDIR ]] || [[ -z $PROJECT ]] || [[ -z $VCPWD ]] || [[ -z $STATS ]] || \
+	[[ -z ${QUEUE_SETTINGS} ]] || [[ -z $QUEUE ]] || [[ -z $STAGE ]]; then
 	echo -e "\nERROR: One or more variables was not specified. Please check the script and re-run." && exit 1
 fi
 # Check the STAGE input
@@ -93,7 +94,7 @@ find $(pwd) -name "'"*.zip"'" | sort > ${PROJECT}_FastQC_${STAGE}QC_zipfiles.txt
 wait; \
 if [[ $STATS ]]; then python $VCPWD/Pipeline_Scripts/.ancillary/fastqc_stats_parser.py -i ${PROJECT}_FastQC_${STAGE}QC_zipfiles.txt -o ${PROJECT}_${STAGE}qc_stats.txt -d $VCPWD -p; \
 fi" \
-| qsub ${QUEUE_SETTINGS} -M $EMAIL -m abe -N $INFO -r n -q $NODE && \
+| qsub ${QUEUE_SETTINGS} -M $EMAIL -m abe -N $INFO -r n -q $QUEUE && \
 
 echo -e "\nJob away!"
 
