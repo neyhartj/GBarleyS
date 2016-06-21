@@ -75,7 +75,7 @@ set -o pipefail
 # Error reporting
 # Check if variables are empty
 if [[ -z $INDIR ]] || [[ -z $OUTDIR ]] || [[ -z $PROJECT ]] || [[ -z $VCPWD ]] || [[ -z $GATK ]] || [[ -z $REFERENCE ]] \
-|| [[ -z $EMAIL ]] || [[ -z ${QUEUE_SETTINGS} ]] || [[ -z ${GATK_SETTINGS} ]] || [[ -z $NODE ]]; then
+|| [[ -z $EMAIL ]] || [[ -z ${QUEUE_SETTINGS} ]] || [[ -z ${GATK_SETTINGS} ]] || [[ -z $QUEUE ]]; then
         echo -e "\nERROR: One or more variables was not specified. Please check the script and re-run." && exit 1
 fi
 
@@ -133,7 +133,7 @@ do OUTLIST=Target_Lists/"'$(basename $SAMPLE ".bam")'"_realign_targets.list; \
 OUTBAM=IndelRealigned_BAMs/"'$(basename $SAMPLE ".bam")'"_realigned.bam; \
 java -Xmx31g -jar $GATK -T RealignerTargetCreator -R $REFERENCE -I "'$SAMPLE'" ${GATK_SETTINGS} -o "'$OUTLIST'"; \
 java -Xmx14g -jar $GATK -T IndelRealigner -R $REFERENCE -I "'$SAMPLE'" -targetIntervals "'$OUTLIST'" -o "'$OUTBAM'"; \
-done" | qsub ${QUEUE_SETTINGS} -M $EMAIL -m abe -N $INFO -r n -q $NODE
+done" | qsub ${QUEUE_SETTINGS} -M $EMAIL -m abe -N $INFO -r n -q $QUEUE
 
 	# If the KNOWN_INDELS variable is not blank, launch jobs with that option
 	else
@@ -145,7 +145,7 @@ do OUTLIST=Target_Lists/"'$(basename $SAMPLE ".bam")'"_realign_targets.list; \
 OUTBAM=IndelRealigned_BAMs/"'$(basename $SAMPLE ".bam")'"_realigned.bam; \
 java -Xmx31g -jar $GATK -T RealignerTargetCreator -R $REFERENCE -I "'$SAMPLE'" ${GATK_SETTINGS} -known ${KNOWN_INDELS} -o "'$OUTLIST'"; \
 java -Xmx14g -jar $GATK -T IndelRealigner -R $REFERENCE -I "'$SAMPLE'" -targetIntervals "'$OUTLIST'" -known ${KNOWN_INDELS} -o "'$OUTBAM'"; \
-done" | qsub ${QUEUE_SETTINGS} -M $EMAIL -m abe -N $INFO -r n -q $NODE
+done" | qsub ${QUEUE_SETTINGS} -M $EMAIL -m abe -N $INFO -r n -q $QUEUE
 
 	# End the if statement
 	fi

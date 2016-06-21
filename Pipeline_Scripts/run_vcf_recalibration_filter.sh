@@ -113,7 +113,7 @@ set -o pipefail
 # Error reporting
 # Check if variables are empty
 if [[ -z $VCFIN || -z $VCPWD || -z $GATK || -z ${GATK_SETTINGS} \
-	|| -z $REFERENCE || -z ${QUEUE_SETTINGS} || -z $NODE || -z $STATS || -z $RECALIBRATE \
+	|| -z $REFERENCE || -z ${QUEUE_SETTINGS} || -z $QUEUE || -z $STATS || -z $RECALIBRATE \
 	|| -z $KEYFILE ]]; then
 	echo -e "\nERROR: One or more variables was not specified. Please check the script and re-run." \
 	&& exit 1
@@ -227,7 +227,7 @@ vcftools --vcf - --remove-indels --remove-filtered-all --remove-indv ${BAD_SAMPL
 mv $OUTVCFV.recode.vcf $OUTVCFV; \
 if [[ $STATS ]]; then bcftools stats $OUTVCFV > $(basename $OUTVCFV ".vcf")_stats.out; fi; \
 rm new_vcf_sample_names.txt" \
-| qsub ${QUEUE_SETTINGS} -M $EMAIL -m abe -N $INFO -r n -q $NODE
+| qsub ${QUEUE_SETTINGS} -M $EMAIL -m abe -N $INFO -r n -q $QUEUE
 
 # Otherwise just filter using VCFtools
 else
@@ -239,7 +239,7 @@ vcftools --vcf "'"$VCFIN"'" --remove-indels --remove-filtered-all --min-alleles 
 --max-missing $MaxMISS --recode --recode-INFO-all --out $OUTVCFV; \
 mv $OUTVCFV.recode.vcf $OUTVCFV; \
 if [[ $STATS ]]; then bcftools stats $OUTVCFV > $(basename $OUTVCFV ".vcf")_stats.out; fi" \
-| qsub ${QUEUE_SETTINGS} -M $EMAIL -m abe -N $INFO -r n -q $NODE
+| qsub ${QUEUE_SETTINGS} -M $EMAIL -m abe -N $INFO -r n -q $QUEUE
 
 fi && echo -e "\nJob away!"
 

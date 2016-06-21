@@ -71,7 +71,7 @@ set -o pipefail
 # Error reporting
 # Check if variables are empty
 if [[ -z $INDIR ]] || [[ -z $OUTDIR ]] || [[ -z $PROJECT ]] || [[ -z $REFINDEX ]] || [[ -z $VCPWD ]] \
-|| [[ -z $EMAIL ]] || [[ -z $NODE ]] || [[ -z $MAPPER ]] || [[ -z ${BWA_SETTINGS} ]] || [[ -z ${QUEUE_SETTINGS} ]] \
+|| [[ -z $EMAIL ]] || [[ -z $QUEUE ]] || [[ -z $MAPPER ]] || [[ -z ${BWA_SETTINGS} ]] || [[ -z ${QUEUE_SETTINGS} ]] \
 || [[ -z ${BOWTIE_SETTINGS} ]] || [[ -z ${SAMTOOLS_SETTINGS} ]]; then
 	echo "One or more variables was not specified. Please check the script and re-run." && exit 1
 fi
@@ -138,7 +138,7 @@ OUTPUT="'${RGID}'"raw.bam; \
 bowtie2 -p $NCORES ${BOWTIE_SETTINGS} --rg-id "'$RGID'" --rg "'$SMID'" --rg PL:Illumina --rg LB:${PROJECT} -x $REFINDEX -U "'$fastq'" | samtools view ${SAMTOOLS_SETTINGS} - -o "'$OUTPUT'"; \
 >&2 echo "'"Mapping complete: $(date)"'"; \
 done" \
-| qsub ${QUEUE_SETTINGS} -e $VCPWD/Pipeline/Read_Mapping/$PROJECT/Read_Map_Logs/${INFO}_log.out -M $EMAIL -m abe -N $INFO -r n -q $NODE
+| qsub ${QUEUE_SETTINGS} -e $VCPWD/Pipeline/Read_Mapping/$PROJECT/Read_Map_Logs/${INFO}_log.out -M $EMAIL -m abe -N $INFO -r n -q $QUEUE
 
 
 	# Else run BWA
@@ -153,7 +153,7 @@ OUTPUT="'${RGID}'"raw.bam; \
 bwa mem -t $NCORES ${BWA_SETTINGS} -R "'@RG\tID:$RGID\tSM:$RGID\tPL:'"$PLATFORM"'\tLB:'"${PROJECT} $REFINDEX "'$fastq'" | samtools view ${SAMTOOLS_SETTINGS} - -o "'$OUTPUT'"; \
 >&2 echo "'"Mapping complete: $(date)"'"; \
 done" \
-| qsub ${QUEUE_SETTINGS} -e $VCPWD/Pipeline/Read_Mapping/$PROJECT/Read_Map_Logs/${INFO}_log.out -M $EMAIL -m abe -N $INFO -r n -q $NODE
+| qsub ${QUEUE_SETTINGS} -e $VCPWD/Pipeline/Read_Mapping/$PROJECT/Read_Map_Logs/${INFO}_log.out -M $EMAIL -m abe -N $INFO -r n -q $QUEUE
 
 	fi
 

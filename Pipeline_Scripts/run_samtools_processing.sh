@@ -45,7 +45,8 @@ set -o pipefail
 
 # Error reporting
 # Check if variables are empty
-if [[ -z $INDIR ]] || [[ -z $PROJECT ]] || [[ -z $VCPWD ]] || [[ -z $OUTDIR ]] || [[ -z ${QUEUE_SETTINGS} ]] || [[ -z $NODE ]] || [[ -z $EMAIL ]]; then
+if [[ -z $INDIR ]] || [[ -z $PROJECT ]] || [[ -z $VCPWD ]] || [[ -z $OUTDIR ]] || \
+	[[ -z ${QUEUE_SETTINGS} ]] || [[ -z $QUEUE ]] || [[ -z $EMAIL ]]; then
 	echo -e "\nERROR: One or more variables was not specified. Please check the script and re-run." && exit 1
 fi
 
@@ -90,7 +91,7 @@ samtools flagstat $OUTDIR"'/Processed/${bamname}_processed.bam'" > $OUTDIR"'/Sta
 samtools index $OUTDIR"'/Processed/${bamname}_processed.bam'"; }; \
 export -f process_bam; \
 parallel "'"process_bam {}"'" ::: ${BAMLIST[@]}" \
-| qsub ${QUEUE_SETTINGS} -M $EMAIL -m abe -N $INFO -r n -q $NODE && \
+| qsub ${QUEUE_SETTINGS} -M $EMAIL -m abe -N $INFO -r n -q $QUEUE && \
 
 echo -e "\nJobs away!"
 

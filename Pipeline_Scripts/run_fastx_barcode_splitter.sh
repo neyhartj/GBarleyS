@@ -54,7 +54,8 @@ set -o pipefail
 
 # Error reporting
 # Check if variables are empty
-if [[ -z $KEYFILE ]] || [[ -z $INDIR ]] || [[ -z $OUTDIR ]] || [[ -z $PROJECT ]] || [[ -z $VCPWD ]] || [[ -z $EMAIL ]] || [[ -z ${QUEUE_SETTINGS} ]] || [[ -z ${FASTX_SETTINGS} ]]; then
+if [[ -z $KEYFILE ]] || [[ -z $INDIR ]] || [[ -z $OUTDIR ]] || [[ -z $PROJECT ]] || [[ -z $VCPWD ]] || \
+	[[ -z $EMAIL ]] || [[ -z ${QUEUE_SETTINGS} ]] || [[ -z $QUEUE ]] || [[ -z ${FASTX_SETTINGS} ]]; then
 	echo "One or more variables was not specified. Please check the script and re-run." && exit 1
 fi
 
@@ -160,7 +161,7 @@ function barcode_split () { zcat $fastq | fastx_barcode_splitter.pl --bcfile "'"
 }; \
 export -f barcode_split; \
 parallel --no-notice -j ${NCORES} \"barcode_split {}\" ::: ${BCODEFILES[@]}" \
-| qsub "${QUEUE_SETTINGS}" -M $EMAIL -N ${prefix}_Barcode_Splitting_$YMD -m abe -r n -q $NODE
+| qsub "${QUEUE_SETTINGS}" -M $EMAIL -N ${prefix}_Barcode_Splitting_$YMD -m abe -r n -q $QUEUE
 
 done && echo "Jobs away!"
 
