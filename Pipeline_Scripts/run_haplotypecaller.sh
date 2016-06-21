@@ -59,7 +59,9 @@ QUEUE=''
 ## files will be merged downstream.
 # -drf DuplicateRead: disable the DuplicateRead filter (this is very important
 ## for GBS data)
-GATK_SETTINGS='--genotyping_mode DISCOVERY --emitRefConfidence GVCF -drf DuplicateRead'
+# --heterozygosity 0.008 The nucleotide diversity in the organism of interest. Barley is 0.008 to
+## 0.01
+GATK_SETTINGS='--genotyping_mode DISCOVERY --emitRefConfidence GVCF -drf DuplicateRead --heterozygosity 0.008'
 
 # File path up to and including the GBarleyS directory 
 ## (i.e. path/to/GBarleyS)
