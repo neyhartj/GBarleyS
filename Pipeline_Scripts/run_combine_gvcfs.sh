@@ -53,8 +53,8 @@ QUEUE=''
 ## for GBS data)
 GATK_SETTINGS='-drf DuplicateRead'
 
-# File path up to and including the Barley_VCP directory
-## (i.e. path/to/Barley_VCP)
+# File path up to and including the GBarleyS directory
+## (i.e. path/to/GBarleyS)
 VCPWD=
 
 # Variable of which stage the pipeline is in
@@ -82,8 +82,8 @@ if [[ $STAGE != "Raw" ]] && [[ $STAGE != "Recal" ]]; then
         echo -e "\nERROR: An improper input was given to STAGE. Please correct." && exit 1
 fi
 
-INPUTS=( INDIR:$INDIR OUTDIR:$OUTDIR VCPWD:$VCPWD REFERENCE:$REFERENCE QUEUE:${QUEUE_SETTINGS} \
-GATK_SETTINGS:${GATK_SETTINGS} GATK:$GATK PROJECT:$PROJECT NODE:$NODE STAGE:$STAGE )
+INPUTS=( INDIR:$INDIR OUTDIR:$OUTDIR VCPWD:$VCPWD REFERENCE:$REFERENCE QUEUE_SET:${QUEUE_SETTINGS} \
+GATK_SETTINGS:${GATK_SETTINGS} GATK:$GATK PROJECT:$PROJECT QUEUE:$QUEUE STAGE:$STAGE )
 
 
 # Change directory
@@ -117,7 +117,6 @@ NCORES=$(echo ${QUEUE_SETTINGS} | grep -o "ppn=[0-9]*" | grep -o "[0-9]*")
 ## separation
 # For each unique flowcell-lane name
 for fl in $(echo "${GVCF_LIST[@]}" | grep -o '[A-Z0-9]\{9\}_[0-9]' | sort -u)
-do
 
         # Create an array of all g.vcf files in the larger list that are from
 	## the specific flowcell-lane
@@ -130,26 +129,35 @@ do
 	## Remember, this needs to be in base 0
 	## First find the length of the array
 	NUMGVCFS=${#LANEGVCFS[@]}
-	## Next find the appropriate length of the interval
-	INT=$(expr $NUMGVCFS / 4)
-	## Reset the number of GVCFS to base 0 (minus 1)
-	NUMGVCFS=$(expr $NUMGVCFS - 1)
-	## Create an array of the cutoffs
-	GVCFSEQ=( $(seq 0 $INT $NUMGVCFS) )
-	## Replace the 5th array component with the number of GVCFS (minus 1)
-	GVCFSEQ[4]=$NUMGVCFS
-	declare -a JOBARRAY # Create blank array
-	## For loop to divide the array
-	for i in $(seq 0 3); do
-		FIRST=${GVCFSEQ[$i]}
-		# Select the GVCFs starting at FIRST and going INT in length
-		## and add the GATK -V flag
-		# Add a number to the beginning to designate the set	
-		JOBARRAY[$i]=${i}__$(echo ${LANEGVCFS[@]:$FIRST:$INT} | sed 's\ \--variant\g')
-	done
+	# Declare empty array
+	declare -a JOBARRAY
 
-	# Launch the jobs
-	echo "cd $OUTDIR && \
+	## If the number of .gvcf files is less than 4, simply continue because 
+	# it is not worth combining so few
+	if [ $NUMGVCFS -lt 4 ]; then
+		echo -e "\nThere are less than 4 .gvcf files from this Flowcell-Lane combination \
+and it is therefore not worth combining so few.\n" && continue
+	else 
+
+		## Next find the appropriate length of the interval
+		INT=$(expr $NUMGVCFS / 4)
+		## Reset the number of GVCFS to base 0 (minus 1)
+		NUMGVCFS=$(expr $NUMGVCFS - 1)
+		## Create an array of the cutoffs
+		GVCFSEQ=( $(seq 0 $INT $NUMGVCFS) )	
+		## Replace the 5th array component with the number of GVCFS (minus 1)
+		GVCFSEQ[4]=$NUMGVCFS
+		## For loop to divide the array
+		for i in $(seq 0 3); do
+			FIRST=${GVCFSEQ[$i]}
+			# Select the GVCFs starting at FIRST and going INT in length
+			## and add the GATK -V flag
+			# Add a number to the beginning to designate the set	
+			JOBARRAY[$i]=${i}__$(echo ${LANEGVCFS[@]:$FIRST:$INT} | sed 's\ \--variant\g')
+		done
+
+		# Launch the jobs
+		echo "cd $OUTDIR && \
 module load parallel && \
 module load java && \
 function gvcf_combine () { SETNUM="'$(grep -o ^[0-9] <<< $1)'"; \
@@ -162,7 +170,10 @@ wait; \
 cd $OUTDIRC; \
 GVCFSC="'$(echo $(find '"$OUTDIR -name \"${fl}*g.vcf\""') | sed '"'s/ / --variant /g'"')'"; \
 OUTFILE=${fl}_cohort.g.vcf; \
-java -Xmx60g -jar $GATK -T CombineGVCFs -R $REFERENCE --variant "'$GVCFSC'" ${GATK_SETTINGS} -o "'$OUTFILE'"" | qsub ${QUEUE_SETTINGS} -M $EMAIL -m abe -N $INFO -r n -q $QUEUE
+java -Xmx60g -jar $GATK -T CombineGVCFs -R $REFERENCE --variant "'$GVCFSC'" ${GATK_SETTINGS} -o "'$OUTFILE'"" \
+| qsub ${QUEUE_SETTINGS} -M $EMAIL -m abe -N $INFO -r n -q $QUEUE
+
+	fi
 
 done && echo "Jobs away!"
 
