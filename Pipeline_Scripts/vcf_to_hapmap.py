@@ -112,11 +112,11 @@ def rrBLUP_hapmap(VCF):
 ##### End of function #####
 
 def TASSEL_hapmap(VCF):
-    print "Writing the non-reformatted hapmap file using TASSEL encoding."
-    # Create filename
-        filename = str(args.outfile) + '_hmp.txt'
-        # Open handle for writing file
-        handle = open(filename, 'w')
+	print "Writing the non-reformatted hapmap file using TASSEL encoding."
+    	# Create filename
+	filename = str(args.outfile) + '_hmp.txt'
+	# Open handle for writing file
+	handle = open(filename, 'w')
     
     # Lists for handling chromosome name
     chrom_l = [] # Empty list of chromosomes
