@@ -53,8 +53,8 @@ QUEUE=''
 ## for GBS data)
 GATK_SETTINGS='-drf DuplicateRead'
 
-# File path up to and including the GBarleyS directory
-## (i.e. path/to/GBarleyS)
+# File path up to and including the Barley_VCP directory
+## (i.e. path/to/Barley_VCP)
 VCPWD=
 
 # Variable of which stage the pipeline is in
@@ -116,7 +116,7 @@ NCORES=$(echo ${QUEUE_SETTINGS} | grep -o "ppn=[0-9]*" | grep -o "[0-9]*")
 # Subdivide the processed bam list by lane and run jobs based on this 
 ## separation
 # For each unique flowcell-lane name
-for fl in $(echo "${GVCF_LIST[@]}" | grep -o '[A-Z0-9]\{9\}_[0-9]' | sort -u)
+for fl in $(echo "${GVCF_LIST[@]}" | grep -o '[A-Z0-9]\{9\}_[0-9]' | sort -u); do
 
         # Create an array of all g.vcf files in the larger list that are from
 	## the specific flowcell-lane
@@ -136,7 +136,14 @@ for fl in $(echo "${GVCF_LIST[@]}" | grep -o '[A-Z0-9]\{9\}_[0-9]' | sort -u)
 	# it is not worth combining so few
 	if [ $NUMGVCFS -lt 4 ]; then
 		echo -e "\nThere are less than 4 .gvcf files from this Flowcell-Lane combination \
-and it is therefore not worth combining so few.\n" && continue
+and it is therefore not worth combining so few.\n"
+
+		# Move the files to the "Combined_GVCF" directory
+		for file in ${NUMGVCFS[@]}; do
+			mv $file $OUTDIRC
+		# Continue
+		continue
+
 	else 
 
 		## Next find the appropriate length of the interval
