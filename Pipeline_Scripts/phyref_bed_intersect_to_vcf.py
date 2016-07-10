@@ -58,32 +58,32 @@ with open(args.intersect_in, 'r') as vcf:
 		if line.startswith('#'):
 			handle.write(line)
 
-        else:
-        	# Split line on tabs
-        	tmp = line.strip().split('\t')
+                else:
+                	# Split line on tabs
+                	tmp = line.strip().split('\t')
 
-        	# Subset the regular VCF info
-        	vcf_info = tmp[:-7]
-        	# Subset further the info to print
-        	vcf_toprint = vcf_info[2:]
-        	# Get the position in the chromosome part
-        	part_pos = int(vcf_info[1])
+                	# Subset the regular VCF info
+                	vcf_info = tmp[:-7]
+                	# Subset further the info to print
+                	vcf_toprint = vcf_info[2:]
+                	# Get the position in the chromosome part
+                	part_pos = int(vcf_info[1])
 
-        	# Subset the results from the intersection
-        	intersect_info = tmp[-7:]
-        	# Get the new chromosome name
-        	new_chrom = intersect_info[3]
-        	# Get the chromosome start position
-        	chrom_start = int(intersect_info[4])
+                	# Subset the results from the intersection
+                	intersect_info = tmp[-7:]
+                	# Get the new chromosome name
+                	new_chrom = intersect_info[3]
+                	# Get the chromosome start position
+                	chrom_start = int(intersect_info[4])
 
-        	# Add the part_pos to the chrom_start
-        	new_chrom_pos = chrom_start + part_pos
+                	# Add the part_pos to the chrom_start
+                	new_chrom_pos = chrom_start + part_pos
 
-        	# Make the new toprint list
-        	toprint = [new_chrom] + [str(new_chrom_pos)] + vcf_toprint
+                	# Make the new toprint list
+                	toprint = [new_chrom] + [str(new_chrom_pos)] + vcf_toprint
 
-        	# Print
-        	handle.write('\t'.join(toprint) + '\n')
+                	# Print
+                	handle.write('\t'.join(toprint) + '\n')
 
 	# Close the file
 	handle.close()
