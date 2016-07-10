@@ -19,9 +19,9 @@ def rrBLUP_hapmap(VCF):
   # Open handle for writing file
   handle = open(filename, 'w')
 	
-	# Lists for handling chromosome name
-	chrom_l = [] # Empty list of chromosomes
-	chrom_index = [] # Index of the chromosome positions
+  # Lists for handling chromosome name
+  chrom_l = [] # Empty list of chromosomes
+  chrom_index = [] # Index of the chromosome positions
 
 	# Start reading through the vcf file
   for line in VCF:
@@ -31,7 +31,7 @@ def rrBLUP_hapmap(VCF):
       # Look for the #CHROM line as this is the line that contains sample information
     elif line.startswith('#CHROM'):
       # Split the line on tabs
-     	tmp = line.strip().split('\t')
+      tmp = line.strip().split('\t')
       # Fine the format field
       format_field = tmp.index('FORMAT')
       # Get the samples out of the list
@@ -43,68 +43,68 @@ def rrBLUP_hapmap(VCF):
 
     # Now we have the sample names; let's move on to the genotype data
     else:
-        # Create a new list to store the data
+	# Create a new list to store the data
      	toprint = []
 
-      tmp = line.strip().split('\t')
+	tmp = line.strip().split('\t')
 
-      # Assigning variable
-      chrom = tmp[0]
-     	position = tmp[1]
-      ref_allele = tmp[3]
-      alt_allele = tmp[4]
+      	# Assigning variable
+      	chrom = tmp[0]
+	position = tmp[1]
+      	ref_allele = tmp[3]
+      	alt_allele = tmp[4]
 
-			# Handling chromosome names
-			if chrom in chrom_l:
-				pass
-			else:
-				chrom_l.append(chrom)
+	# Handling chromosome names
+	if chrom in chrom_l:
+		pass
+	else:
+		chrom_l.append(chrom)
 
-			# Assign the index of the chromosome within the unique list of chromosomes
-			## as the name of that chromosome
-			chrom_name = str(chrom_l.index(chrom) + 1)
+	# Assign the index of the chromosome within the unique list of chromosomes
+	## as the name of that chromosome
+	chrom_name = str(chrom_l.index(chrom) + 1)
 			
         # The genotype data
      	genotypes = tmp[9:]
 
-      # Create variable for the output file
-      # Create the alleles variable
-      alleles = ref_allele + '/' + alt_allele
-      # The position variable was already created
-      # Create a name for the SNP
+      	# Create variable for the output file
+      	# Create the alleles variable
+	alleles = ref_allele + '/' + alt_allele
+      	# The position variable was already created
+      	# Create a name for the SNP
      	snp_id = 'S' + chrom_name + '_' + position
 
-      # Append to the list each snp_id, alleles, etc
-      toprint.append(snp_id)
-      toprint.append(alleles)
+      	# Append to the list each snp_id, alleles, etc
+      	toprint.append(snp_id)
+      	toprint.append(alleles)
      	toprint.append(chrom_name)
-      toprint.append(position)
+      	toprint.append(position)
 
-      for g in genotypes:
+      	for g in genotypes:
         # The genotype string is separated by :
 	      # The first element of the genotype string is the genotype call
-       	call = g.split(':')[0]
-        # Genotypes are listed as allele1/allele2
-        # Assume the genotypes are unphased
-        # 0 = ref, 1 = alt 1
-	      # 0/0 = homo ref, 0/1 = het, 1/1 = homo alt
+       		call = g.split(':')[0]
+	        # Genotypes are listed as allele1/allele2
+        	# Assume the genotypes are unphased
+	        # 0 = ref, 1 = alt 1
+		# 0/0 = homo ref, 0/1 = het, 1/1 = homo alt
                                 
-				# Encode genotypes in rrBLUP format
-				individual_call =''
+		# Encode genotypes in rrBLUP format
+		individual_call =''
 
-        if call == '0/0': # If the call is 0/0, declare as 1
-          individual_call += '1'
-       	elif call == '0/1': # If the call is 0/1, declare as 0
-      	  individual_call += '0'
-        elif call == '1/1': # If the call is 1/1, declare as -1
-         	individual_call += '-1'
-        else:
-          individual_call += 'NA' # If it isn't any of the above, it its missng
-          # Append the individual calls to the genotype matrix row
-     	    toprint.append(individual_call)
+        	if call == '0/0': # If the call is 0/0, declare as 1
+	        	individual_call += '1'
+	       	elif call == '0/1': # If the call is 0/1, declare as 0
+      			individual_call += '0'
+	        elif call == '1/1': # If the call is 1/1, declare as -1
+        	 	individual_call += '-1'
+        	else:
+          		individual_call += 'NA' # If it isn't any of the above, it its missng
+	        # Append the individual calls to the genotype matrix row
+		toprint.append(individual_call)
 
-      # Print the organized list
-      handle.write('\t'.join(toprint) + '\n')
+      	# Print the organized list
+      	handle.write('\t'.join(toprint) + '\n')
 	
 	print "File was written as " + filename
 	# Close the handle
@@ -189,22 +189,22 @@ def TASSEL_hapmap(VCF):
         # 0 = ref, 1 = alt 1
         # 0/0 = homo ref, 0/1 = het, 1/1 = homo alt
                                 
-      # Encode genotypes in rrBLUP format
-      individual_call =''
+      	# Encode genotypes in rrBLUP format
+      	individual_call =''
 
-        if call == '0/0': # If the call is 0/0, declare as 1
-          individual_call += ref_allele + ref_allele
-        elif call == '0/1': # If the call is 0/1, declare as 0
-          individual_call += ref_allele + alt_allele
-        elif call == '1/1': # If the call is 1/1, declare as -1
-          individual_call += alt_allele + alt_allele
+      	if call == '0/0': # If the call is 0/0, declare as 1
+        	individual_call += ref_allele + ref_allele
+	elif call == '0/1': # If the call is 0/1, declare as 0
+        	individual_call += ref_allele + alt_allele
+	elif call == '1/1': # If the call is 1/1, declare as -1
+        	individual_call += alt_allele + alt_allele
         else:
-          individual_call += 'NN' # If it isn't any of the above, it its missng
-          # Append the individual calls to the genotype matrix row
-          toprint.append(individual_call)
+	        individual_call += 'NN' # If it isn't any of the above, it its missng
+        	# Append the individual calls to the genotype matrix row
+	        toprint.append(individual_call)
 
-          # Print the organized list
-          handle.write('\t'.join(toprint) + '\n')
+        	# Print the organized list
+	        handle.write('\t'.join(toprint) + '\n')
     
     print "File was written as " + filename
     # Close the handle
@@ -236,13 +236,13 @@ parser.add_argument('-o',
                 metavar = 'OUTFILE',
                 help = 'Output file basename (i.e. no extension)',
                 required = True)
-group = parser.add_mutually_exclusive_group('group')
+group = parser.add_mutually_exclusive_group()
 group.add_argument('-r',
 		'--rrBLUP',
 		action = 'store_true',
 		help = 'Boolean flag for whether a hapmap file should be exported in rrBLUP format',
 		required = False)
-group.add_argument('-r',
+group.add_argument('-t',
         '--TASSEL',
         action = 'store_true',
         help = 'Boolean flag for whether a hapmap file should be exported in TASSEL format',
