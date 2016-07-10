@@ -73,7 +73,7 @@ set -o pipefail
 
 # Error reporting
 # Check if variables are empty
-if [[ -z $VCFIN || $VCFOUT || $VCPWD || $KEYFILE || $STATS ]]; then
+if [[ -z $VCFIN || -z $VCFOUT || -z $VCPWD || -z $KEYFILE || -z $STATS ]]; then
 	echo -e "\nERROR: One or more variables was not specified. Please check the script and re-run.\n" && exit 1
 fi
 # Check the STAGE input
@@ -96,7 +96,7 @@ if [[ -z $MaxMISS ]]; then MaxMISS=0; fi
 
 
 # Change directory
-cd $VCPWD/Pipeline/Filter_Variants
+cd $VCPWD/Pipeline/VCF_Processing
 
 # Copy the raw VCF file to the current directory
 echo -e "\nCopying $(basename $VCFIN) to the directory $(pwd)."
