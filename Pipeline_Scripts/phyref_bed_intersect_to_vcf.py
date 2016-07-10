@@ -5,6 +5,9 @@
 # positions with the full physical reference positions. This script requires the 
 # bedtools intersect options to include the header (-header) and the '-wo' flag.
 
+import argparse
+
+
 #####
 # Define the arguments
 #####
@@ -77,11 +80,11 @@ with open(args.intersect_in, 'r') as vcf:
         	new_chrom_pos = chrom_start + part_pos
 
         	# Make the new toprint list
-        	toprint = new_chrom + new_chrom_pos + vcf_toprint
+        	toprint = [new_chrom] + [str(new_chrom_pos)] + vcf_toprint
 
         	# Print
         	handle.write('\t'.join(toprint) + '\n')
 
-# Close the file
-handle.close()
+	# Close the file
+	handle.close()
 print "File written as " + outfilename
