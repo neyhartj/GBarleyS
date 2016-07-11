@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #!/usr/bin/env python
 
 # This python script will convert a VCF file to hapmap files suitable for use in TASSEL
