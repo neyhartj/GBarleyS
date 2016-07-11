@@ -140,7 +140,7 @@ def TASSEL_hapmap(VCF):
       samples = tmp[format_field + 1:]
 
       # First the header line with the information
-      handle.write('rs#\tallele\tchrom\tpos\tstrand\tassembly#\tcenter\tprotLSID\tassayLSID\tpanelLSID\tQCcode' + '\t'.join(samples) + '\n')
+      handle.write('rs#\tallele\tchrom\tpos\tstrand\tassembly#\tcenter\tprotLSID\tassayLSID\tpanelLSID\tQCcode\t' + '\t'.join(samples) + '\n')
 
     # Now we have the sample names; let's move on to the genotype data
     else:
