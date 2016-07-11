@@ -15,16 +15,16 @@ import sys
 
 def rrBLUP_hapmap(VCF):
   print "Writing the non-reformatted hapmap file using rrBLUP encoding."
-	# Create filename
+      # Create filename
   filename = str(args.outfile) + '_hmp.txt'
   # Open handle for writing file
   handle = open(filename, 'w')
-	
-	# Lists for handling chromosome name
+      
+      # Lists for handling chromosome name
   chrom_l = [] # Empty list of chromosomes
   chrom_index = [] # Index of the chromosome positions
 
-	# Start reading through the vcf file
+      # Start reading through the vcf file
   for line in VCF:
 
     if line.startswith('##'):
@@ -55,7 +55,7 @@ def rrBLUP_hapmap(VCF):
       ref_allele = tmp[3]
       alt_allele = tmp[4]
 
-			# Handling chromosome names
+      # Handling chromosome names
       if chrom in chrom_l:
         pass
       else:
@@ -64,7 +64,7 @@ def rrBLUP_hapmap(VCF):
       # Assign the index of the chromosome within the unique list of chromosomes
       ## as the name of that chromosome
       chrom_name = str(chrom_l.index(chrom) + 1)
-			
+      
       # The genotype data
       genotypes = tmp[9:]
 
@@ -78,19 +78,19 @@ def rrBLUP_hapmap(VCF):
       # Append to the list each snp_id, alleles, etc
       toprint.append(snp_id)
       toprint.append(alleles)
-     	toprint.append(chrom_name)
+      toprint.append(chrom_name)
       toprint.append(position)
 
       for g in genotypes:
         # The genotype string is separated by :
-	      # The first element of the genotype string is the genotype call
+            # The first element of the genotype string is the genotype call
         call = g.split(':')[0]
         # Genotypes are listed as allele1/allele2
         # Assume the genotypes are unphased
         # 0 = ref, 1 = alt 1
-	      # 0/0 = homo ref, 0/1 = het, 1/1 = homo alt
+            # 0/0 = homo ref, 0/1 = het, 1/1 = homo alt
                                 
-				# Encode genotypes in rrBLUP format
+      # Encode genotypes in rrBLUP format
         individual_call =''
 
         if call == '0/0': # If the call is 0/0, declare as 1
