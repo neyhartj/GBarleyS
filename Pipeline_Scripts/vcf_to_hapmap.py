@@ -245,7 +245,7 @@ group.add_argument('-r',
   action = 'store_true',
   help = 'Boolean flag for whether a hapmap file should be exported in rrBLUP format',
   required = False)
-group.add_argument('-r',
+group.add_argument('-t',
   '--TASSEL',
   action = 'store_true',
   help = 'Boolean flag for whether a hapmap file should be exported in TASSEL format',
