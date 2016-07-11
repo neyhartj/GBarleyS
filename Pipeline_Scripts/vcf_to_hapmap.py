@@ -20,8 +20,8 @@ def rrBLUP_hapmap(VCF):
   handle = open(filename, 'w')
 	
 	# Lists for handling chromosome name
-	chrom_l = [] # Empty list of chromosomes
-	chrom_index = [] # Index of the chromosome positions
+  chrom_l = [] # Empty list of chromosomes
+  chrom_index = [] # Index of the chromosome positions
 
 	# Start reading through the vcf file
   for line in VCF:
@@ -55,14 +55,14 @@ def rrBLUP_hapmap(VCF):
       alt_allele = tmp[4]
 
 			# Handling chromosome names
-			if chrom in chrom_l:
-				pass
-			else:
-				chrom_l.append(chrom)
+      if chrom in chrom_l:
+        pass
+      else:
+        chrom_l.append(chrom)
 
 			# Assign the index of the chromosome within the unique list of chromosomes
 			## as the name of that chromosome
-			chrom_name = str(chrom_l.index(chrom) + 1)
+      chrom_name = str(chrom_l.index(chrom) + 1)
 			
         # The genotype data
      	genotypes = tmp[9:]
@@ -112,7 +112,7 @@ def rrBLUP_hapmap(VCF):
 ##### End of function #####
 
 def TASSEL_hapmap(VCF):
-  print "Writing the non-reformatted hapmap file using rrBLUP encoding."
+  print "Writing the non-reformatted hapmap file using TASSEL encoding."
   # Create filename
   filename = str(args.outfile) + '_hmp.txt'
   # Open handle for writing file
@@ -163,7 +163,7 @@ def TASSEL_hapmap(VCF):
       ## as the name of that chromosome
       chrom_name = str(chrom_l.index(chrom) + 1)
       
-        # The genotype data
+      # The genotype data
       genotypes = tmp[9:]
 
       # Create variable for the output file
@@ -189,8 +189,8 @@ def TASSEL_hapmap(VCF):
         # 0 = ref, 1 = alt 1
         # 0/0 = homo ref, 0/1 = het, 1/1 = homo alt
                                 
-      # Encode genotypes in rrBLUP format
-      individual_call =''
+        # Encode genotypes in rrBLUP format
+        individual_call =''
 
         if call == '0/0': # If the call is 0/0, declare as 1
           individual_call += ref_allele + ref_allele
@@ -200,15 +200,16 @@ def TASSEL_hapmap(VCF):
           individual_call += alt_allele + alt_allele
         else:
           individual_call += 'NN' # If it isn't any of the above, it its missng
-          # Append the individual calls to the genotype matrix row
-          toprint.append(individual_call)
+          
+        # Append the individual calls to the genotype matrix row
+        toprint.append(individual_call)
 
-          # Print the organized list
-          handle.write('\t'.join(toprint) + '\n')
+      # Print the organized list
+      handle.write('\t'.join(toprint) + '\n')
     
-    print "File was written as " + filename
-    # Close the handle
-    handle.close()
+  print "File was written as " + filename
+  # Close the handle
+  handle.close()
 ##### End of function #####
 
 
@@ -226,27 +227,27 @@ parser = argparse.ArgumentParser(description=DESC, add_help=True)
 # Add arguments
 # Input VCF file
 parser.add_argument('-i',
-                '--vcf_in',
-                metavar = 'VCFIN',
-                help = 'Input VCF file',
-                required = True)
+  '--vcf_in',
+  metavar = 'VCFIN',
+  help = 'Input VCF file',
+  required = True)
 # Output file name
 parser.add_argument('-o',
-                '--outfile',
-                metavar = 'OUTFILE',
-                help = 'Output file basename (i.e. no extension)',
-                required = True)
+  '--outfile',
+  metavar = 'OUTFILE',
+  help = 'Output file basename (i.e. no extension)',
+  required = True)
 group = parser.add_mutually_exclusive_group('group')
 group.add_argument('-r',
-		'--rrBLUP',
-		action = 'store_true',
-		help = 'Boolean flag for whether a hapmap file should be exported in rrBLUP format',
-		required = False)
+  '--rrBLUP',
+  action = 'store_true',
+  help = 'Boolean flag for whether a hapmap file should be exported in rrBLUP format',
+  required = False)
 group.add_argument('-r',
-        '--TASSEL',
-        action = 'store_true',
-        help = 'Boolean flag for whether a hapmap file should be exported in TASSEL format',
-        required = False)
+  '--TASSEL',
+  action = 'store_true',
+  help = 'Boolean flag for whether a hapmap file should be exported in TASSEL format',
+  required = False)
 
 # Parse the arguments
 args = parser.parse_args()
