@@ -44,16 +44,16 @@ def rrBLUP_hapmap(VCF):
 
     # Now we have the sample names; let's move on to the genotype data
     else:
-        # Create a new list to store the data
-        toprint = []
+      # Create a new list to store the data
+      toprint = []
 
-        tmp = line.strip().split('\t')
+      tmp = line.strip().split('\t')
 
-        # Assigning variable
-        chrom = tmp[0]
-        position = tmp[1]
-        ref_allele = tmp[3]
-        alt_allele = tmp[4]
+      # Assigning variable
+      chrom = tmp[0]
+      position = tmp[1]
+      ref_allele = tmp[3]
+      alt_allele = tmp[4]
 
 			# Handling chromosome names
       if chrom in chrom_l:
