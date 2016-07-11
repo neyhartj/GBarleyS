@@ -239,7 +239,7 @@ parser.add_argument('-o',
   metavar = 'OUTFILE',
   help = 'Output file basename (i.e. no extension)',
   required = True)
-group = parser.add_mutually_exclusive_group('group')
+group = parser.add_mutually_exclusive_group(required = True)
 group.add_argument('-r',
   '--rrBLUP',
   action = 'store_true',
