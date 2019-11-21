@@ -77,7 +77,7 @@ if [[ -z $INDIR ]] || [[ -z $OUTDIR ]] || [[ -z $PROJECT ]] || [[ -z $REFINDEX ]
 fi
 
 # Check the MAPPER input
-if [[ $MAPPER != "Bowtie" ]] && [[ $STAGE != "BWA" ]]; then
+if [[ $MAPPER != "Bowtie" ]] && [[ $MAPPER != "BWA" ]]; then
         echo -e "\nERROR: An improper input was given to MAPPER. Acceptable inputs are 'Bowtie' and 'BWA'." && exit 1
 fi
 
